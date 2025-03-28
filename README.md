@@ -2,9 +2,9 @@
 
 Learning Qt Records  at Ubuntu
 
-## 2025.3.27
+> 2025.3.27
 
-#### 1：新建一个项目
+## 1：新建一个项目
 
 1. 作为初学者我们选择第一个Application(Qt)和 Qt Widgets Application 
 2. 项目名称尽量选择英文，防止出错
@@ -35,7 +35,7 @@ Learning Qt Records  at Ubuntu
 
 * Forms 分组，存放项目内所有界面文件*.ui。 *.ui 文件由 XML 语言描述组成，编译时会生成相应的cpp 文件，这样交叉编器就可以编译它了(只能通过图形界面修改其属性),里面主要分为 控件栏、显示窗口、对象栏、属性栏
 
-#### 2：初识信号与槽
+## 2：初识信号与槽
 
 在ui界面添加一个按钮，点击后关闭这个窗口程序
 简单来说：信号即是一个对象发出的信号，槽即是当这个对象发出这个信号时，对应连接的槽就发被执行或者触发  
@@ -46,7 +46,7 @@ Learning Qt Records  at Ubuntu
 
 方法二：选中按钮对象，右键，转到槽，可以发现放入的按钮对象都是继承其他槽函数的，点击ok后会跳转到槽函数里，在mainwindow.cpp里会生成一个on_pushButton_clicked  槽函数，this->close();调用 close()方法关闭整个程序 
 
-#### 3：信号与槽
+## 3：信号与槽
 
 1. QT Designer方式开发程序简单，优点是可以比较直观的看到整体的布局，缺点是控件多了不好管理，统一用代码绘界面，可以==锻炼布局能力和代码逻辑能力==
 
@@ -130,9 +130,26 @@ disconnect(myObject, 0, myReceiver, 0);
 
 9. 一般面向对象编程，都是一个类一个头文件和CPP文件，在A类下编程，this指向调用该函数的A类对象
 
-#### 4：QT控件
+> 2025.3.28
 
-##### 按钮
+QT对象树机制，目的就是为了方便管理内存
+
+为什么要设置父对象？因为窗口互相联系，比如A需要显示在B上，A需要指定B为父对象
+在父对象销毁的时候，子对象也会被销毁
+
+```C++
+/* 1.构造函数传参 */
+pushButton = new QPushButton(this);
+/* 2.通过setParent（）方法 */
+pushButton = new QPushButton();
+pushButton->setParent(this);
+```
+
+## 4：QT控件
+
+QT样式表是一种强大的QT机制，它允许自定义小部件的外观
+
+### 按钮
 
 1. QPushButton:下压按钮
    \-QPushButton 继承 QAbstractButton 类，==被 QCommandLinkButton继承==。
@@ -155,3 +172,32 @@ disconnect(myObject, 0, myReceiver, 0);
    \-QDialogButtonBox 继承 QWidget
    \-常用于对话框里自定义按钮，比如“确定”和“取消” 按钮
 
+```c++
+MainWindow::MainWindow(QWidget *parent){
+        pushButton = new QPushButton(this);//创建父子关系
+        pushButton->setText("Text");//设置按钮的文本属性
+        pushButton->setGeometry(50, 50, 100, 50);//设置按钮的大小
+        this->resize(800, 480);//设置主窗口的大小
+}
+```
+
+* QPushButton：
+  声明一个 QPushButton 对象 
+  声明对象 pushButton1 的槽函数 
+  实例化两个按钮对象 
+  信号槽连接 
+  槽函数的实现 
+
+* QToolButton：
+  声明 QToolButton 对象和 QtoolBar 对象 
+  初始化 toolBar（工具条/工具栏）对象
+  初始化 toolButton（工具按钮）对象
+  设置工具按钮的样式
+  将 toolButton（工具按钮）添加到 toolBar（工具条/工具栏）上  
+* QRadioButton
+  声明两个 QRadioButton 对象
+  实例化对象
+  设置两个 QRadioButton 的位置和显示大小
+  设置两个 QRadioButton 的显示文本
+  设置初始状态， radioButton1 的 Checked 为 false,另一个为 true
+  在 main.cpp 里加载 qss 文件
